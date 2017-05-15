@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Nigel Nelson</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <style>
+        ul.techs {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul.techs li {
+            display: inline-block;
+            padding-left: 20px;
+            margin-right: 8px;
+            background-position: center left;
+            background-repeat: no-repeat;
+        }
+        li.docker{ background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABklBMVEUAAAA6SE0rj6s1YW4zWGIyans+NTVAMjIlb4EtZXQc4P8A//9APDs8R0wA//84UFhBREUKhq8fbIVTKhxES08aboakDQkeLzVhLCYzanoxc4Y1X2w0Vl8wXWk1V2EwdIctgZkzaHg/MjBCLy8pZ3cfeI0rfJMpfZMhepAuY3Ivf5kvgJpeDQAoaXklcoYkgZglfZQkcYUpZ3csk7Ykn8cagqAmboQ2TlUtan0md44ndowyepQnj7EVnsgRkbYkcok5TVQ4TlUehaQmlLgmoMklnscckbUlb4U7SlA+REY5TVQ9SU0YdpUebok8SU45TVM5TVQgaoIrjKoDibQRepwqX3EmJSd3jZOlvcGaxtEEibQHha4NfqMacY0yV2QAAghbcnh7kpddipkgbYgkZnw0VWGBDwAmfpUmfpUjgJksiaQkf5gmgJksh6EhgZoln8cln8cnkLImncUnm8EokbMJjrYHlr8UlbsbkrQKlr4LlbwMkbcKkrwLiLFAob0/or4Vm8IBmsYBl8MAkr8rm7/////gdzJJAAAAZ3RSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM10VCh0blPY4BQNJ3N7w8zhoYAJiu/76r1Ca4IRGBTfAqEKs8shSGUfR/vr4+oREEBQqvK8kIg9Z8/24IwZp2/v+9NF5FgEgUGJbPhYBHf0R9QAAAKBJREFUGNNjYCATMDJJSkkzw7ksMrJy8gqKrGxKyuxgAQ4VVTV1DU1OLi1tbh4GBl4dXT399AwDQyM+YxNTMwZ+cwvLzKzsnNw8K2sbWzt7BgdHJ+f8gsKi4hIXVzd3D08GL2+f0rLyisqq6ppaXz//AAYBwcCguvqGxqbm4JBQIWGgHSJh4RGRLVHRMbFxomJgW8XjExKTklNS0yTI9BYAxGIiS7V2LZoAAAAASUVORK5CYII=); }
+        li.angular { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACSElEQVQ4EW1TTWsTYRB+3u3uhtgkpYhQK9VaMRY/KoofqRQxCHqS1lraxkZET/4AqVQQPIiHHjz1B0RFil/FsxSRFKTQGFJteoiS2ByKSBMwSTdpXLPObN24XfPAvO/MMzMPs/sywjAMAQeyxwPniBquwQin9GqFCiIe0TTTuxibd5RCWALU1E3JMNlNsjazUFWxpBVNlw8FWBUQEY8kvQgkYp+YEyvHTgfpniI7yIQd3rFRpJaTyC3E7LTpKxBpA8YtmaI+sv+aIUnwhkbQlck0FPgFo8slxCmJmvOmpONwnw9Cbt+JHWd64fX7HdnN0AXxgwWyjbK+sRA2PidRyeWw78b1RiWQhfjKAsvOrNpzBK6ewyhMP0fm8VO0XbwAN03jhAwRl3bH59OUqNmTvvBV/M7noc2+Q/blK+ildey9xg/0D01A9URiocATMLTNC5B3tcMdPAujXMH2exM4NHEHerGIjsHLUFparDKQwBoHlsCqleE/D8NArVSC6t8PX/cB6No6hKJgD+fqECl2+RkZHPiFx4Pm/ksov49ibfwuDCKT+gbncfThA3SGRpGOPEGtUoEOI868NcESB57BAUjN21B6/YbDLfj2bBpqays6BvpNXhHCfH5rAlbTtbezcjk6B30lu6WZg5/JJOauDFORxt9fUCGizNt3oZPiSbIhMhP2T2CClkqnximfJN0/mYgVTM5aJrODDlqqAF2PyAJ2AWqcoSUapyXiZ6+jPkGd+euQ0BCt8+QXvfrdLaTbfYsfPzhrOP4DGqvE20JNAgAAAAAASUVORK5CYII=); }
+        li.javascript { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABUElEQVR42mJcbWPjycDAMBeIJRlIA8+BOJmJTM0MUD1zmcjUDDeEiYFCwIIuoODpySAPxBcnT2b4cPs2A7eEBINmUhKYBoGH27czPABiGMBwAZekJIOooSEDKw8PmG8HNAhkKEzOpKoKjHG6ABkIqKqCbb42fz7DtXnzwGJWbW0M3168IM4AkBd+f/nCoBoaCnH+tm0Mx5Bsx+oFdADS8PX5cwatxEQGz9WrGewnTQK7jGgDXp8/z7AHGIjbga4AeQWkGWQIhgGwUIYBkNNBgekPDHGQpq9Af4PC4enhw/AAhoeBfm4ug4KXF1hS2tYWrBkWhSAAshEkB4tmkBwMMIfJyTX8fP+eQUBFhUEMaCNI8mRjI8OPd+/ABr08dQpskJC2NgMb0OYXQP7JhgaGf79+gQ1gBGam/5SkRCZoriIXvAAZkAJikKH5KSg7AwQYAKH/elfcpmh+AAAAAElFTkSuQmCC); }
+        li.node { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACO0lEQVQ4EXWTv2sUQRTHv/Pm7brxFxaWolHESvAvMGlsBMGQKsZCm4iFlWiIFmIl4RCJhVgFDoSgIZ1gY0CM/hmJKJpLjNxdcpf7sbM7M75duXPJJQuzM/vmfT/7vm9nlfdeYZ9r5v3tEeWDUmc3cXFip1/fevN1nzSovYAHHydOaReW2OoJbxnWAI3dGEy0QITplzfLlSKoD7i3fC1iCmfY5SPUqUYGcIlCu50gtQ4Bk9GknjnvZucmy4IGKLvd+XB1nNivSj1PoBBmseLFTHDOwVoXeo+nrHn14dLUWJajbrwaG1Kha5y8kDDZCFI+2IYoVmCMQyc28AIJmGVoVLar6WajfpQCHRKZEKbBxZcOrJVSuQ0rkDhJ8Xu7lgNJfCEIGPHWkIj8gLAYSK1Fklqs16sS1iBPIA60AEgeGclOUMwfWGf4ZqeNVtwFkYLSAiHy0KzAgcLat7qUNaDrB7ID00kNQhEGOgCrrIowhWKHRreFVreLynqzLzhoYWyKSBoZiXWKVQyjY1RqNWSNqmw0YRJ7kDaPG5tAPidISQ9a4Y7bqNbJ2v8N/PHzH+wgirhH07TpRHQM9O76p26jlkzKy7d6gq3qrtjJD1ovtHfelM85Wb771uQnceXxl0XpxznJKslwWYfXfv3JLe1ROlKqxMTnPz9aWcz2+v9CL3F0dmRYDD4Xj+MXh0/jeHQExlh0TboUx8n0/NTC915uNg8Aepujs5evHD4UzV06c9YJ4P6Lifnl3l5x/guuTQe3KhBYQwAAAABJRU5ErkJggg==); }
+        li.c { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACo0lEQVQ4EX2TXUhUQRTH/zP3w1uZqeRm6IsZqEkiQUaFouGDPfTSUy9KCBmIuBL1VKJiSZRk6pMGEQhCBUEPkYLYSwqZlquYRh8o7Ka56+qK6e79mmbusrEb1oF778yZ8/+dc2fOEPzDLre+0dSsg9fEsu4LPHjSWhHeLZTs5rzSP1NJJLmNUnpGrNu2Pc4ss+VRXdHI3/EJgLq+2Vwi0VsMpNoGkQw94sQrahIomEXABphl3+6/evxbDOQA6vomFZsqTRKVrxOquAw9jJyMPchx7XXivq9uY9G/A0XVwGxjVaaks76koLuwkOiyE0GVTkXd12hyocwiqCnNwtm8NEg0WqBlM4x9Xsfzd8swQF2LwV/3yroGs7nWTQWAMdJgRnZgmhYunspEWUG6I/YGw/CuhZ2x8J3MTcbwx3kMTXqwsbXdILTRCvhG24xph9OSUJafzoHAi/crGPb4IUsUpXmpWAoE0PVqFmuhHXAiQIgeD4AoMztdgypT/AxFMDoX5OsEX1fWMDjmwVZoi6fjQiGOs1gFcS6AEgJ/cB0Tnk/w+jlIS+ZiJSEmNvmDExu2vGHAtIGMFBVH03T4vD5IZgTuqjx01JyGK5WfCv+9eHMq4BlVnhSjk/PI1DZRf+EEOmorcKn8mBNbdOSQ891c38DdZ1NAyn4xV8XLAQRDm70Tc1/c3sUlfPDMQCIMtVXFiAkNfjqPh6bR8/QtEDHFP4JoWq8AxDpRoeXNbqKoN/guuWDqKM7PQgl/RM0TCz5ML/zg6URSa5Uxdt8eedkNTBkxgIAB59pzJYnc5KNqWEyG4ZwUeAtyLuGpMWBZ7A5GmxNbWWjjTa5sr2SEtIFELxPv33HCWIs50vz/yxQPwfmeJGqGmoTPlg88xOvG6M1KCAJ+A+Cv+Il3e3DCAAAAAElFTkSuQmCC); }
+        li.gameboy { background-image: url(data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB+fn6hUlBR/1pYWf9aWFn/WlhZ/1pYWf9aWFn/WlhZ/1pYWf9UU1T/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUlFS/6ynqv+9uLv/yMLF/8jCxf/IwsX/yMLF/8jCxf+ppKf/qaWn/76+vlEAAAAAAAAAAAAAAAAAAAAAAAAAAFpZWv+9t7r/ysTH/8rEx/+KiYr/lpaW/3x8fP+cmJv/rqqs/5iXmP9aWVr/AAAAAAAAAAAAAAAAAAAAAAAAAABjYWL/ysTH/6umqf+hnaD/qaeo/8C8vv+ioaL/yMLF/6GeoP+ppKf/UlFS/wAAAAAAAAAAAAAAAAAAAAAAAAAAY2Fi/6GdoP89Oz3/IiEi/5+bnv/k4OL/3NfZ/8rEx//KxMf/wr3A/2NhYv8AAAAAAAAAAAAAAAAAAAAAAAAAAGNhYv8JCQn/Dw8P/w8PD/8AAAD/5ODi/8rH2/8REYD/l5aX/5COuv9jYWL/AAAAAAAAAAAAAAAAAAAAAAAAAABjYWL/49/h/3Jwcf9PTk7/5ODi/+Tg4v/k4OL/r66u/3Z2pP8nJon/Y2Fi/wAAAAAAAAAAAAAAAAAAAAAAAAAAY2Fi/+Pf4f/k4OL/1NDS/+Tg4v/k4OL/5ODi/+Tg4v/k4OL/49/h/2NhYv8AAAAAAAAAAAAAAAAAAAAAAAAAAGNhYv9COjr/ExAQ/xMQEP8TEBD/PDMz/zwzM/88MzP/PDMz/7axsv9jYWL/AAAAAAAAAAAAAAAAAAAAAAAAAABjYWL/Qjo6/zwzM/+JsLD/ibCw/4mwsP+JsLD/ibCw/zwzM/9COjr/Y2Fi/wAAAAAAAAAAAAAAAAAAAAAAAAAAY2Fi/0I6Ov9ANzf/hK2t/4Strf+Era3/hK2t/4Strf9ANzf/Qjo6/2NhYv8AAAAAAAAAAAAAAAAAAAAAAAAAAGNhYv9IPz//UXZJ/32jo/99o6P/faOj/32jo/99o6P/WU9P/0g/P/9jYWL/AAAAAAAAAAAAAAAAAAAAAAAAAABramv/X1ZW/1lPT/93nJz/d5yc/3ecnP93nJz/d5yc/1lPT/9fVlb/a2pr/wAAAAAAAAAAAAAAAAAAAAAAAAAAa2pr/19WVv9ZT0//aXl5/2l5ef9peXn/aXl5/2l5ef9ZT0//X1ZW/2tqa/8AAAAAAAAAAAAAAAAAAAAAAAAAAGtqa//49ff/+PX3//j19//49ff/+PX3//j19//49ff/+PX3//j19/9ramv/AAAAAAAAAAAAAAAAAAAAAAAAAAB+fn6hc3Nz/3Nzc/9zc3P/c3Nz/3Nzc/9zc3P/c3Nz/3Nzc/9zc3P//v7+UQAAAAAAAAAA4AcAAOAHAADgAwAA4AMAAOADAADgAwAA4AMAAOADAADgAwAA4AMAAOADAADgAwAA4AMAAOADAADgAwAA4AcAAA==); }
+        li.html5 { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACLElEQVR42pTTzWsTQRgG8PEk6B/gwYOKmdlNLFbsoeDFi5fS3czWoonUmNZQUQSVgh+XCt6sFgQV7SUgHgQvEcRTYkHBVpBaQVFUatNkJslmp22iofTDNo+HkE3WqOALz2348fK8DJnp9rcJzvD/oRsACCGEEMHZ/N8eLsYCLVERPwSnwgVkkH0WnEH0tkGGOzwpn+/05kw7VESHCNJpF8ia2gvBGfI3h6CU8uT3WYpfgdOnQ1o02QAs+khwhtxwP5RScD5MoZhKoJhKYO3duCc/rvWgeEyHtOiDJsB3R3CG3NBhKKVgP77vdlAaDLTEDukQnF13gTmLDgvOIGMHaxtMT6IQH0EhPoLlp3c9KZ/dj/wRDcKgFxtXsLRYvcR/d1BF6VQA+V4NkrMTLjBr6GZ95dylsCeV0Sgqo1FUvytUyw5KgwHIHoYMZ4dcYKZ7x4E6UHyVhPPmZUsH1bUVrIsvKA0GIDiDNFi7C6QtfacLTD6HUg7yV09ChvahfK4TS2MXAAA/P73GYqwGCINtdwF0kc0ukEo0OrALQHXDbWB14gkWBvwQnAGEbHKBWpGsUityD3KXw7Af3oLzdgLr6fdYeTaGyo0ISqf3Yj7qhwxSmxBCPEDWpN/+9Bea77/Q74cd0pAN0o8tQJrTAWGx8Qxnq82Ac1xH4agGaTFkTbosLZoUhq+vBaiPHdm2NWfsMqVF72VMNiss39cMp7fnzN1dU2bHlua3AMivAQDxV2O+AiePuAAAAABJRU5ErkJggg==); }
+        li.grunt { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACtElEQVQ4EWVSTUwTQRR+s7Nladm2LpVKlQDyI0GDNGJKQCGa2AOQCOGi8YQc0IjgQeJJ7sYAB3+D8UCMB72JfwkhMYSoNxKLYoLhxwOBWowttLUUdnd8M7Wrxrd5b95879tvvk6XwO8I1haUYztEKQkbJusDBsW4P4kZwHyAGcLZbcNghUBgYPLD+iJiIPPCQ6bSMwbsoDsvh2wmd7p0w3yNcAcmwUelEunEmYIzBsAqEK/BBIkXHrrJaglA7FGfm6h2Shqrd53qbfVKvW1e3ne47DaJz5Aa41zxEhbLgabaHlb67AJ/fEVTsOEposWf4wDIEf2RCieNbOy8wE0bBywHKL3WWKXkCxaWqY9oFB8eU5/EIkpDpeJGM9EsYjkghMyFlnfYRAhIU7kCbQET3s1yxwDNhwCev5dgeiENPjfAj4Q+kRWwHDgVet/noETV9kFd/zgMv6Rw/DCIHMKeY6q2F5ADDlm6958AJZDi4PWWdZi51Q6J7Yx9/jOSaSawwdbv4j1ZJttZgYxH3J0O+FzFnty3dUW5NeeClrEsDwyDwNM3BsyspELza8km/A7ifGgxU2k9vhjZ6uQgP3UhnFlFv4ZEavIRrMb0M7gkxAaLJVDfcOJVcWlFd3awhAL8G+KR6QFsEoGS0rJLnCsGWP78C5Qe9XgKjkVMUx8Zj8rt9ZySuYeyQoCRcSTbNchz7e4mEhX3xRmWQHxzY/nshWsBaqZh9MZVcepS2LoiWIpK0NMzCCZV1CejNz/zl3lYjKC/QCvdXzXtUh3Ve+gK/RIhcKcr4+DyGIEDXgbfzCK2Gf8593V5vhkvUXxMlgBXQxHiy8+dcipy0/B5+z+zgbEUGIzNLqwm/ZOh9Yzy3w64AI+g3yt7nLZ+zWG7WOS2lSBEwgk9HEvpd8PRrWE8WRfE3+UXY1/pNbFEqhAAAAAASUVORK5CYII=); }
+        li.nginx { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAa0lEQVR42rRT2w7AMAR1xL/6Jl+r28uSJpSum5emwrkQcHcC4PQirl7gfqesFV06f5kOg7fYgxrpSs3AOSzQAtA6CjqqHgCrmTJA7g5rvYWIVXt2ZMuzrbZQeU/mJN/MgJq+/7gFnJ7zEGAAqigdiMYwC8EAAAAASUVORK5CYII=); }
+        li.postgresql { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADKUlEQVQ4jY2QS0xcVQCGv3POnQd3hg4wzACD02lJoYA8aqtVUZtSCU21Fh8L2xBXxsSNcdOFMca12zaamBhrY2yoadKGamljtUqd1NpGbBsiIEh4CgxCOzLced17jysMCxd+6+//Fr/QWpPJZKJL6ey7VtZySgOBuWgolBTCXphKpd9Zy2TykaqKBb/0pL/65vpxYaiyZx5t+7hxW+wksCJWV9NHT54bON1/9a7PLuYxkLzUtdu2KKQvD/4WtgsOHiVpbY7T3NpE35eXMaSk58ATqeNv9BxS+3uOffrRqYsJR5cCfnxeh4cfaZAX+m+bGj9CGGjhZ3HZYn5qgsPdHQyPzjMyvhjYEuRx+evY1F5bRUAWQeZp39VMMjlMUSikBoQCimjtZSVjMDs9S0NDHVoZ/Hk/FzY8rgZpg/ahhU08FiFRW8GBEi/Tsyt8lxxFYAAWhw/toa4mxP01wcjYEvHaqnG5tTZ0R9g2AFprMAwGBq4yNjFHdXUApV2k9uA3XMpNyZUfkqyuraHI8mRLYlC2Ne68LYWDiwYEdr5I1g5y49Y0M5Mr+KWDK20cO4etTJaXbbI5i9amqLUjVn1KRkPBn7bFK9nAZ3hwnQISB1+Jl6KWoA0cXc745AxBb4FK06D3SNclYE66tp1tb0oALgJNLpclaHoQFKmtDZN3FYIsjjS4d2eWl1/opnlrJN+xa8cHALKysvzrzr31v3i1BULy/fWfefv1F1e6nqp/YBczGEIhUQjtUnRgPrVMW338s5BpDgFIINPWsP29Z59uf4Cdo7enc7Bzz85XXn1uX8payxAL+3GlQKsCOHliFRE+PH2x9/Oz52/ML/71vNBaA7CQ+rv325tDR7s7Wj6ZmFl4/8qPN1taGuvo67/n+2PJQksLb1HzxYm3zlVFo33BEnXXB5PGxnk10S1nXjuy/wxAqWnO1T9U85iVs3xnL42e0KyDBsPjpSwQGA6XqAsbu38DmzFNc8g0zaH19fV2pTToPAgwTROl+H2zK/8rsEEgEBipKCMvXIHQHirLFX6PTP3vAFA4uG93qsxvk4h6efPYwfOhYPDaZuEfvrJG+3HTiEcAAAAASUVORK5CYII=); }
+        li.socketio { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfiBBEFIzL6yGIZAAABQElEQVQoz03RvUuVcRQH8M/v53VQTGgw34rKQRch8GZ1Ie3SENxBSRcVRCdxlSAnQfwPWlzaWqKpuEa+rOJbS5Czw0UCQYlACi6hPg73Pg+e4XDO93vO4XvOCVJrVlB0T6Jix4F/NTjUfcG8Jj9URA89UvXeriTtnrBp0q1sWospG2bFWvrCpscpF4RGea36fTMKt30ydoNuCW/DNCgq645eqdrIBHVblbcWYNux1zlFe6r1AYPe6TLmPIErO0ajDpVM2lOH3iQ/M/HH7kRJfVXxrw+OPA8vs23+i9Ef7RkwY1nOYUjzTmfRd09EgmTArKVk0VmSah62z11rhtEaVsJIehrwTNl9GPdVr57QF26wHvhishY2mLeuJJeRDQo+W5BLnxWVzPltzy9Bh7wuH5VdpAXQrmRIm0un9m05qcHXIcpKDRLX2msAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDQtMTZUMjM6MzE6MzMtMDY6MDCYtNJpAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTA0LTE2VDIzOjMxOjMzLTA2OjAw6elq1QAAAABJRU5ErkJggg==); }
+        li.express { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+klEQVR42mL4//8/AxYsBsSTgfgJFIPYotjUogtwA3EdEH96vHz5/7OJiWD8eMWK/yAxqBw3sh5GsCkMDCxAnArE9c/Xrxd/tnEjw+/37xmQAaugIIOUvz+DZGDgCyC3CYhnA/EfkAEeQMbEl9u3qwExw7eHDxnwAS55eQZxT08QvgXk5oMM+HKztZX7/alTDKQAQTMzBvXq6q9MQDbJmkEAqoebiYFCMGoAxICvgqamJGuE6vkKSgee0ISkSmJCug1LSKQm5ZdAbiNyUkZWxw3ExUBc8mTFCt5Xu3aBBcXc3BhkIiI+A5k9QNwLcjpcBwnZWQybWoAAAwAlJ/SnpefyHAAAAABJRU5ErkJggg==); background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+klEQVR42mL4//8/AxYsBsSTgfgJFIPYotjUogtwA3EdEH96vHz5/7OJiWD8eMWK/yAxqBw3sh5GsCkMDCxAnArE9c/Xrxd/tnEjw+/37xmQAaugIIOUvz+DZGDgCyC3CYhnA/EfkAEeQMbEl9u3qwExw7eHDxnwAS55eQZxT08QvgXk5oMM+HKztZX7/alTDKQAQTMzBvXq6q9MQDbJmkEAqoebiYFCMGoAxICvgqamJGuE6vkKSgee0ISkSmJCug1LSKQm5ZdAbiNyUkZWxw3ExUBc8mTFCt5Xu3aBBcXc3BhkIiI+A5k9QNwLcjpcBwnZWQybWoAAAwAlJ/SnpefyHAAAAABJRU5ErkJggg==); }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="row mb-3 mt-3 mb-lg-0">
+            <div class="col-lg-8">
+                <h1 class="display-2">Nigel Nelson</h1>
+            </div>
+
+            <div class="col-lg-4">
+                <ul class="nav nav-fill justify-content-end mt-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://twitter.com/ClayLoam" target="_blank">Twitter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/shamblesides" target="_blank">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="container">
+
+        <!-- <div class="jumbotron" style="min-height:400px">
+            <h1 class="display-4">I can't stop building weird web stuff</h1>
+            <p class="lead">Want to make something weird with me? Let's get in touch!</p>
+        </div> -->
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video class="embed-responsive-item" src="./rpnow.mp4" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0">RPNow.net</h4>
+                <!-- <ul class="techs">
+                    <li class="docker">Docker</li>
+                    <li class="nginx">Nginx</li>
+                    <li class="postgresql">PostgreSQL</li>
+                    <li class="node">Node</li>
+                    <li class="express">Express</li>
+                    <li class="socketio">Socket.IO</li>
+                    <li class="angular">Angular</li>
+                </ul> -->
+                <p>RPNow is a web app for collaborative storytelling and writing. During its 4 year run, 32,000,000 posts have been sent between 120,000 unique users.</p>
+                <p>The technology stack behind RPNow has evolved over the years. Previously, it was a Single-Page App powered by Docker, Nginx, Postgres, Node, Express, Socket.IO, and Angular 5. Today, it is a self-hosted application that uses Vue and Golang, distributed as a single executable file.</p>
+                <p>Although the canonical instance at rpnow.net no longer exists, RPNow has since become an open-source, self-hostable project that anyone can download and deploy.</p>
+                <a href="https://docs.google.com/document/d/1wN3TK5f2MDp9_q_U_8H2GknMNxxw8wX2Bk-0OMVbkGU" class="btn btn-primary" target="_blank">Read the Docs</a>
+                <a href="https://github.com/rpnow/rpnow" class="btn btn-outline-primary" target="_blank">View on GitHub</a>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <img class="img-fluid" style="width:100%" src="https://78.media.tumblr.com/1460eda60e74016e843c4846450121ac/tumblr_n456iusXCf1r2jlv9o3_400.gif">
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0">184</h4>
+                <!-- <ul class="techs">
+                    <li class="javascript">JavaScript</li>
+                    <li class="html5">HTML5</li>
+                    <li class="grunt">Grunt</li>
+                </ul> -->
+                <p>An experiment in bringing responsiveness and touch support to the look and feel of the Gameboy. You can explore this monochrome world on your computer or on your smartphone.</p>
+                <p>I posted the accompanying animation on Tumblr, and it briefly went viral, <a href="http://184game.tumblr.com/post/82925096999" target="_blank">gaining over 1,400 likes and reblogs in one day</a>.</p>
+                <p>184 was written in pure JavaScript on an HTML5 canvas.</p>
+                <a href="/184" target="_blank" class="btn btn-primary">Play in Browser</a>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <video class="embed-responsive-item" style="height:auto" src="./tone.mp4" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0">Tone's Adventure</h4>
+                <!-- <ul class="techs">
+                    <li class="c">C</li>
+                    <li class="gameboy">GBDK</li>
+                </ul> -->
+                <p>This is a homebrew Gameboy Color game written in C using the <a href="http://gbdk.sourceforge.net/" target="_blank">GBDK compiler</a>. Yes, it works on a real Gameboy Color!</p>
+                <p>Although it was never finished, several demos are <a href="/tones-adventure" target="_blank">available to download</a>. The easiest way to play them is by using a browser-based Gameboy emulator, such as <a href="http://taisel.github.io/GameBoy-Online/" target="_blank">GameBoy Online (in-browser)</a></p>
+                <a href="/tones-adventure" target="_blank" class="btn btn-primary">Download Demo</a>
+                <a href="https://github.com/shamblesides/tones-adventure" target="_blank" class="btn btn-outline-primary">View on GitHub</a>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe class="embed-responsive-item" src="https://stackblitz.com/edit/gameboy-sound?ctl=1&embed=1&file=index.js&hideExplorer=1&hideNavigation=1&view=editor"></iframe>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0">gameboy-sound</h4>
+                <!-- <ul class="techs">
+                    <li class="node">Node</li>
+                </ul> -->
+                <p>gameboy-sound is an easy 3 kB JavaScript library for 98% accurate Gameboy audio in the browser!</p>
+                <p>It was created out of frustration with the overwhelming surface area of the web audio API, as well as with how big MP3 files are. I want the retro music in my games to come in retro file sizes!</p>
+                <a href="https://stackblitz.com/edit/gameboy-sound?file=index.js" target="_blank" class="btn btn-primary">Run Example</a>
+                <a href="https://github.com/shamblesides/gameboy-sound" target="_blank" class="btn btn-outline-primary">View on GitHub</a>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <code id="runkit-coolstoryjs"></code>
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0">coolstory.js</h4>
+                <!-- <ul class="techs">
+                    <li class="node">Node</li>
+                </ul> -->
+                <p>Can't think of a name for your novel? This NPM module has got you covered. This was originally just part of RPNow, but I decided to make it available for anyone to use.</p>
+                <p>This module works in Node as well as in the browser.</p>
+                <a href="https://github.com/shamblesides/coolstory.js" target="_blank" class="btn btn-primary">View on GitHub</a>
+                <a href="https://www.npmjs.com/package/coolstory.js" class="btn btn-outline-primary" target="_blank">View on NPM</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://embed.runkit.com"></script>
+
+    <script>
+        RunKit.createNotebook({
+            element: document.getElementById('runkit-coolstoryjs'),
+            source:
+`const { title } = require('coolstory.js')
+
+// generate a few titles
+let myTitles = [ title(), title(), title() ]`
+        })
+    </script>
+
+</body>
+
+</html>

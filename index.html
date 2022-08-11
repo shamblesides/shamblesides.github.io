@@ -41,22 +41,15 @@
 
     <div class="container">
 
-        <div class="row mb-3 mt-3 mb-lg-0">
-            <div class="col-lg-8">
-                <h1 class="display-2">Nigel Nelson</h1>
-            </div>
-
-            <div class="col-lg-4">
-                <ul class="nav nav-fill justify-content-end mt-3">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://twitter.com/ClayLoam" target="_blank">Twitter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/shamblesides" target="_blank">GitHub</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <h1 class="display-2">Nigel Nelson</h1>
+        <ul class="nav mt-3">
+            <li class="nav-item">
+                <a class="nav-link" href="https://twitter.com/ClayLoam" target="_blank">Twitter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/shamblesides" target="_blank">GitHub</a>
+            </li>
+        </ul>
 
     </div>
 
@@ -72,11 +65,28 @@
         <div class="row mb-5">
             <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
                 <div class="embed-responsive embed-responsive-16by9">
+                    <video class="embed-responsive-item" src="./familiars.mp4" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0"><a href="https://www.familiars.io" target="_blank">Familiars.io</a></h4>
+                <p>Web-based, mobile-friendly Pokemon clone with original creatures and artwork. It's online multiplayer &mdash; have your friend open it up and play it with you!</p>
+                <p><a href="https://twitter.com/ClayLoam/status/1337488664243277824" target="_blank">Viral on Twitter in 2020 when I embedded the whole game in a tweet :)</a></p>
+                <p>
+                    Client is vanilla JavaScript, uses pixi.js for efficient drawing to a canvas element.
+                    Music and sound effects synthesized in real-time using my own gameboy audio library, APU. (More details further down!)</p>
+                <p>Server is written in Rust, using tokio and axum to provide the websocket API. Database is SQLite, Runs on a VPS running plain ol' Debian.</p>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <div class="embed-responsive embed-responsive-16by9">
                     <video class="embed-responsive-item" src="./rpnow.mp4" autoplay loop muted playsinline></video>
                 </div>
             </div>
             <div class="col-lg-6 col-xl-7">
-                <h4 class="mt-0">RPNow.net</h4>
+                <h4 class="mt-0"><a href="https://www.rpnow.net" target="_blank">RPNow.net</a></h4>
                 <!-- <ul class="techs">
                     <li class="docker">Docker</li>
                     <li class="nginx">Nginx</li>
@@ -86,48 +96,10 @@
                     <li class="socketio">Socket.IO</li>
                     <li class="angular">Angular</li>
                 </ul> -->
-                <p>RPNow is a web app for collaborative storytelling and writing. During its 4 year run, 32,000,000 posts have been sent between 120,000 unique users.</p>
-                <p>The technology stack behind RPNow has evolved over the years. Previously, it was a Single-Page App powered by Docker, Nginx, Postgres, Node, Express, Socket.IO, and Angular 5. Today, it is a self-hosted application that uses Vue and Golang, distributed as a single executable file.</p>
-                <p>Although the canonical instance at rpnow.net no longer exists, RPNow has since become an open-source, self-hostable project that anyone can download and deploy.</p>
-                <a href="https://docs.google.com/document/d/1wN3TK5f2MDp9_q_U_8H2GknMNxxw8wX2Bk-0OMVbkGU" class="btn btn-primary" target="_blank">Read the Docs</a>
-                <a href="https://github.com/rpnow/rpnow" class="btn btn-outline-primary" target="_blank">View on GitHub</a>
-            </div>
-        </div>
-
-        <div class="row mb-5">
-            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
-                <img class="img-fluid" style="width:100%" src="https://78.media.tumblr.com/1460eda60e74016e843c4846450121ac/tumblr_n456iusXCf1r2jlv9o3_400.gif">
-            </div>
-            <div class="col-lg-6 col-xl-7">
-                <h4 class="mt-0">184</h4>
-                <!-- <ul class="techs">
-                    <li class="javascript">JavaScript</li>
-                    <li class="html5">HTML5</li>
-                    <li class="grunt">Grunt</li>
-                </ul> -->
-                <p>An experiment in bringing responsiveness and touch support to the look and feel of the Gameboy. You can explore this monochrome world on your computer or on your smartphone.</p>
-                <p>I posted the accompanying animation on Tumblr, and it briefly went viral, <a href="http://184game.tumblr.com/post/82925096999" target="_blank">gaining over 1,400 likes and reblogs in one day</a>.</p>
-                <p>184 was written in pure JavaScript on an HTML5 canvas.</p>
-                <a href="/184" target="_blank" class="btn btn-primary">Play in Browser</a>
-            </div>
-        </div>
-
-        <div class="row mb-5">
-            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
-                <div class="embed-responsive embed-responsive-4by3">
-                    <video class="embed-responsive-item" style="height:auto" src="./tone.mp4" autoplay loop muted playsinline></video>
-                </div>
-            </div>
-            <div class="col-lg-6 col-xl-7">
-                <h4 class="mt-0">Tone's Adventure</h4>
-                <!-- <ul class="techs">
-                    <li class="c">C</li>
-                    <li class="gameboy">GBDK</li>
-                </ul> -->
-                <p>This is a homebrew Gameboy Color game written in C using the <a href="http://gbdk.sourceforge.net/" target="_blank">GBDK compiler</a>. Yes, it works on a real Gameboy Color!</p>
-                <p>Although it was never finished, several demos are <a href="/tones-adventure" target="_blank">available to download</a>. The easiest way to play them is by using a browser-based Gameboy emulator, such as <a href="http://taisel.github.io/GameBoy-Online/" target="_blank">GameBoy Online (in-browser)</a></p>
-                <a href="/tones-adventure" target="_blank" class="btn btn-primary">Download Demo</a>
-                <a href="https://github.com/shamblesides/tones-adventure" target="_blank" class="btn btn-outline-primary">View on GitHub</a>
+                <p>Web app for collaborative storytelling and writing. Over 30,000,000 posts have been sent from over 100,000 unique IP addresses.</p>
+                <p>The hosted version uses vanilla JavaScript with Userbase.com as the backend (<a href="https://github.com/smallbets/userbase/pulls?q=author%3Ashamblesides" target="_blank">which I ended up contributing to!</a>) but there's also an older version available for self-hosting that uses Vue with a Go backend,
+                    <a href="https://github.com/rpnow/rpnow" target="_blank">which has been open-sourced</a>.</p>
+                
             </div>
         </div>
 
@@ -138,30 +110,54 @@
                 </div>
             </div>
             <div class="col-lg-6 col-xl-7">
-                <h4 class="mt-0">gameboy-sound</h4>
+                <h4 class="mt-0"><a href="https://github.com/shamblesides/apu-legacy" target="_blank">gameboy-sound</a></h4>
                 <!-- <ul class="techs">
                     <li class="node">Node</li>
                 </ul> -->
                 <p>gameboy-sound is an easy 3 kB JavaScript library for 98% accurate Gameboy audio in the browser!</p>
-                <p>It was created out of frustration with the overwhelming surface area of the web audio API, as well as with how big MP3 files are. I want the retro music in my games to come in retro file sizes!</p>
-                <a href="https://stackblitz.com/edit/gameboy-sound?file=index.js" target="_blank" class="btn btn-primary">Run Example</a>
-                <a href="https://github.com/shamblesides/gameboy-sound" target="_blank" class="btn btn-outline-primary">View on GitHub</a>
+                <p>Deliver authentic retro audio on your webpages in <em>kilobytes</em>, not megabytes!</p>
+                <a href="https://stackblitz.com/edit/gameboy-sound?file=index.js" target="_blank">Example usage on StackBlitz</a>
             </div>
         </div>
 
         <div class="row mb-5">
             <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
-                <code id="runkit-coolstoryjs"></code>
+                <img class="img-fluid" style="width:100%" src="./chatchatport.png">
             </div>
             <div class="col-lg-6 col-xl-7">
-                <h4 class="mt-0">coolstory.js</h4>
+                <h4 class="mt-0"><a href="https://chatchatgame.netlify.app/" target="_blank">ChatChat (HTML5 Port)</a></h4>
+                <p>Terry Cavanagh's 2012 Flash game, ChatChat, became unplayable in 2021 due to the death of Flash player. This made me sad! So I contacted Terry, and with his permission and feedback, built the official HTML5 port of this beloved Flash game.</p>
+                <p>Plain JavaScript client and server. <a href="https://github.com/shamblesides/chatchat" target="_blank">Source is available here.</a></p>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <img class="img-fluid" style="width:100%" src="./facebook2.png">
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0"><a href="https://faceb2k.glitch.me/" target="_blank">facebook 2</a></h4>
+                <p>extremely serious idea :) hacked together during the facebook outage of 2021</p>
+                <p>Most likely contains user-generated NSFW text; you have been warned!</p>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 col-xl-5 mb-3 mb-lg-0">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <video class="embed-responsive-item" style="height:auto" src="./tone.mp4" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-7">
+                <h4 class="mt-0"><a href="/tones-adventure" target="_blank">Tone's Adventure</a></h4>
                 <!-- <ul class="techs">
-                    <li class="node">Node</li>
+                    <li class="c">C</li>
+                    <li class="gameboy">GBDK</li>
                 </ul> -->
-                <p>Can't think of a name for your novel? This NPM module has got you covered. This was originally just part of RPNow, but I decided to make it available for anyone to use.</p>
-                <p>This module works in Node as well as in the browser.</p>
-                <a href="https://github.com/shamblesides/coolstory.js" target="_blank" class="btn btn-primary">View on GitHub</a>
-                <a href="https://www.npmjs.com/package/coolstory.js" class="btn btn-outline-primary" target="_blank">View on NPM</a>
+                <p>Unfinished homebrew Gameboy Color game.  Yes, it works on a real Gameboy Color!</p>
+                <p>Although it was never finished, several demos are <a href="/tones-adventure" target="_blank">available to download</a>. The easiest way to play them is by using a browser-based Gameboy emulator, such as <a href="http://taisel.github.io/GameBoy-Online/" target="_blank">GameBoy Online (in-browser)</a></p>
+                <p><a href="https://github.com/shamblesides/tones-adventure" target="_blank">Source is available here.</a>
+                    Written in C, <a href="http://gbdk.sourceforge.net/" target="_blank">compiled with GBDK</a>.</p>
             </div>
         </div>
 

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf8">
+    <meta viewport="width=device-width, initial-scale=1">
+    <title>The Saga of ipv4.games | Nigel Nelson's Blog</title>
+    <style>
+        html {
+            max-width: 70ch;
+            padding: 3em 1em;
+            margin: auto;
+            line-height: 1.75;
+            font-size: 1.25em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>The Saga of <a target="_blank" href="https://ipv4.games">ipv4.games</a></h1>
+<p>
+    During September 2022, my silly weekend project became the battleground of developers, computer security experts, hackers, and botnets. 
+    This post documents all of the events of the
+    <a target="_blank" href="https://ipv4.games">IPv4 Turf War, now hosted (and still playable!) at ipv4.games.</a>
+</p>
+
+<p><b>September 3.</b> I had a little idea...</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Stupid idea: IPv4 turf war.<br><br>The goal is to make your faction control as much “land” as possible.<br><br>Each piece of land corresponds to an IPv4 address.<br><br>You acquire a piece of land by getting a machine at that address to make a request for <br>http://&lt;gameServer&gt;/claim/&lt;factionName&gt;</p>&mdash; Loam (@ClayLoam) <a href="https://twitter.com/ClayLoam/status/1566115729304236032?ref_src=twsrc%5Etfw">September 3, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+<p>I don't really have a tech-heavy audience on Twitter so I decided I'd bring it up in some Discord servers and try to gauge interest. Nobody in the htmx discord responded, but a couple people in the redbean discord did! </p>
+<p>One developer said that in a game like this, players would only be able to play by "throwing money around." I countered by suggesting a few ways to score points without spending any money:</p>
+<ul>
+    <li>spin up servers in different regions in free tiers of cloud providers, heroku-likes, etc, tear them down immediately, repeat</li>
+    <li>use tor</li>
+    <li>use free VPNs</li>
+    <li>put this on a webpage that gets traffic: <code>&lt;img style=“display:none” src=“server_url/claim/my_username”&gt;</code></li>
+    <li>ask your friends and followers to help you</li>
+</ul>
+
+<p><b>September 4.</b> Work begins. I briefly worried that if players could spoof their IP addresses, it would defeat the purpose of the game. Fortunately, some quick searching around suggested that it's <a href="https://security.stackexchange.com/questions/124184/is-it-possible-to-send-http-packet-via-spoofed-ip">virtually impossible to do for a TCP connection.</a></p>
+
+<p><b>September 6.</b> The first iteration is complete! At this point it's just <a href="https://github.com/shamblesides/turfwar/blob/41809de5e9a024272bcb9643e0cf0ac9e974004b/static/index.html" target="_blank">82 lines of plain HTML and JavaScript,</a> served by a <a href="https://github.com/shamblesides/turfwar/blob/41809de5e9a024272bcb9643e0cf0ac9e974004b/main.go" target="_blank">181-line Go HTTP server writing to a SQLite database.</a></a> At the time, I didn't have a domain yet, so I just linked to the IP address of the VPS.</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">ip address turf war START<br><br>how many ip&#39;s can you convince to send a GET request to my server??<br><br>it&#39;s happening here http://108.61.215.240/ <a target="_blank" href="https://t.co/OyQ0oV3lwl">pic.twitter.com/OyQ0oV3lwl</a></p>&mdash; Loam (@ClayLoam) <a href="https://twitter.com/ClayLoam/status/1567304589862641665?ref_src=twsrc%5Etfw">September 7, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>Besides tweeting about it, I had mostly been advertising it in the redbean discord server. Justine Tunney, the creator of redbean, asked me if the game itself was using the redbean server. I answered "No, but it could be." I was interested in building something atop redbean anyway, so...</p>
+
+<p><b>September 7.</b> I replaced the Go backend with redbean! It wasn't too hard: I just had to write about 100 lines of Lua.</p>
+
+<p>Justine, interested in the success of the game, <a target="_blank" href="https://github.com/shamblesides/turfwar/pull/1">submits a small PR</a> to speed things up by making sure the <code>lsqlite3</code> module is already loaded before redbean forks off a child process to handle a request. With that, we're ready to go!</p>
+
+<p><b>September 8.</b> People are starting to play the game...</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Wow things are really heating up in the IPv4 Games!!! Very rewarding and fun to see people playing it <a href="https://t.co/Lfvb1RvXX0">pic.twitter.com/Lfvb1RvXX0</a></p>&mdash; Loam (@ClayLoam) <a href="https://twitter.com/ClayLoam/status/1567886213499199492?ref_src=twsrc%5Etfw">September 8, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
+<p><b>September 10.</b> And more...</p>
+<blockquote class="twitter-tweet"><p lang="und" dir="ltr">33 ???!??!? <a href="https://t.co/PdDrbemZlG">pic.twitter.com/PdDrbemZlG</a></p>&mdash; Loam (@ClayLoam) <a href="https://twitter.com/ClayLoam/status/1568514965941923840?ref_src=twsrc%5Etfw">September 10, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+<p>...and more! Erin's thread is particularly interesting to me because she explains the exact methods by which she gains control over an unprecedented 92 blocks.</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">this <a href="https://t.co/ArsVNK87ju">https://t.co/ArsVNK87ju</a> site is a sorta neat numbers game! the general gist is that you poking a URL with an IP address gives you a point. now, let&#39;s try to dominate it through highly scalable means because silly numbers go brrrrrr</p>&mdash; site reliability erin (@eggrins) <a href="https://twitter.com/eggrins/status/1568568824383041537?ref_src=twsrc%5Etfw">September 10, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
+<p>Later that day, one player <a target="_blank" href="https://news.ycombinator.com/item?id=32790429">posted the game to Hacker News</a>. It sat around the #8 spot on the front page for the rest of the day! The discussion there is definitely worth a read, as <a target="_blank" href="https://mikedamm.com/">Mike Damm</a> (mike_d) discloses the way he was able to control over half the board at once (I believe the record was 132 blocks!)</p>
+
+<p>Amazingly, despite the surge of new activity, the server was holding up extremely well! Everything was going great until...</p>
+
+<blockquote class="twitter-tweet"><p lang="pt" dir="ltr"><a href="https://twitter.com/ClayLoam?ref_src=twsrc%5Etfw">@ClayLoam</a> ipv4 games down</p>&mdash; brandan (@souleducation) <a href="https://twitter.com/souleducation/status/1568939736613490691?ref_src=twsrc%5Etfw">September 11, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p><b>September 11.</b> Around noon, the game suffers hours-long stretches of partial downtime. Most attempts to claim new URL's were failing. Unfortunately I was busy with other things that day so I didn't have too much time to debug, but I believe that there was simply too much contention on the SQLite database. Besides that, I was essentially asking the whole Internet to DDOS my $5 VPS which only had 1 vCPU and 1GB of RAM. I didn't have time to fix things this day, so I just rebooted the server when I had a moment of free time, and just let it be down otherwise.</p>
+
+<p><b>September 12.</b> I start working on a fix! Over the next couple days, I do the following improvements:</p>
+<ul>
+    <li>One cause of contention was from players repeatedly attempting to re-claim addresses they already held. This should be a no-op, but was needlessly acquiring a write lock on the database. Therefore, <a target="_blank" href="https://github.com/shamblesides/turfwar/commit/f098438eb897eeb400daa09415ace52f961a3a2e#diff-fac75a1345cf4b6f0b624d440f093225ad9dac5f80f0c72612d18df06d3324d5R31-R42">before attempting to do an INSERT or UPDATE, I do a preliminary SELECT to make sure the address isn't already owned by the player.</a> Even though this is more queries than before, it's still less contention because read-only queries don't require an exclusive lock on the database.</li>
+    <li>The homepage used to make 256 HTTP requests to the backend to get the data for each block individually. I knew this wasn't optimized but was sort of curious how long I could get away with it. So I made it so you get the data you need in a single endpoint.</li>
+    <li>I start proactively cleaning up sqlite-related resources as soon as possible, instead of waiting for them to get cleaned up automatically</li>
+    <li>I configured redbean to have a less verbose access log, since it had apparently filled up my server's entire disk 😅</li>
+    <li>For good measure, I upgrade to a slightly more powerful VPS (2 vCPU, 4GB RAM)</li>
+</ul>
+
+<p><b>September 14.</b> Fixes are completed, things are running smoothly again! Until...</p>
+
+<p><b>September 15.</b> This morning, I receive three e-mails from Vultr, my cloud provider.</p>
+<ul>
+    <li>10:00 &mdash; Vultr reports that my server is the target of a DDOS attack, and my server has been null routed to protect their other customers</li>
+    <li>10:10 &mdash; JCloud reports to Vultr that my server has been doing UDP netscans against their network (port 123)</li>
+    <li>10:30 &mdash; Hetzner reports the same thing</li>
+</ul>
+<p>It's pretty shocking to find that the server was compromised! At this point, I decided I'd already put more time into server hardening and maintenance than I had ever intended to. So, I decided that I was satisfied with a glorious week of gaming, and shut down the server.</p>
+
+<p>The End...?</p>
+
+<p><b>September 16.</b> Justine Tunney reaches out to me, offering to maintain and host the game server herself. She expresses that hosting a project like this could provide helpful insight into hardening the redbean server for future high-performance projects. This is great news to me! I send her a backup of the database. She sets up the server.</p>
+
+<p>An hour later, Justine identifies the vulnerability and temporarily brings down the server.</p>
+
+<p><b>September 17.</b> Redbean 2.0.19 is released, and ipv4.games is back online! 🎉</p>
+
+<p>Overall, I'm quite happy with how things turned out for ipv4.games. It was very fun to watch increasingly powerful players take over larger and larger spaces on the board. And ultimately it proved to be quite helpful as it improved security for redbean, a project which by now I'm sure you can tell I'm quite interested in its success.</p>
+
+</body>

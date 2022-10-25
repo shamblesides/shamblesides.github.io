@@ -23,15 +23,20 @@
 
 <div id="app" v-cloak>
     <p>Date: {{currentDate}}</p>
+    <button type="button" v-on:click="position = Math.max(0, position-5000)">&lt;&lt;&lt;</button>
+    <button type="button" v-on:click="position = Math.max(0, position-50)">&lt;&lt;</button>
     <button type="button" v-on:click="position = Math.max(0, position-1)">-</button>
     <input type="range" min="0" v-bind:max="numRecords" v-model="position">
     <button type="button" v-on:click="position = Math.min(numRecords, position+1)">+</button>
-    <button type="button" v-on:click="position = 300000">300k</button>
-    <ul>
-        <li v-for="[who, count] in totals" :key="who">
-            {{nameOf(who)}} {{count}}
-        </li>
-    </ul>
+    <button type="button" v-on:click="position = Math.min(numRecords, position+50)">&gt;&gt;</button>
+    <button type="button" v-on:click="position = Math.min(numRecords, position+5000)">&gt;&gt;&gt;</button>
+    <ol>
+        <template v-for="who in top" :key="who">
+            <li v-if="totals[who] > 0">
+                {{nameOf(who)}} {{totals[who]}}
+            </li>
+        </template>
+    </ol>
     <p>Total records: {{numRecords}}</p>
 </div>
 
@@ -41,9 +46,10 @@
             return {
                 numRecords: 0,
                 position: 0,
-                totals: new Map(),
                 names: [],
                 dates: [],
+                ranking: Array(24011+1).fill().map((_,i) => i),
+                totals: Array(24011+1).fill(0),
             }
         },
         computed: {
@@ -51,6 +57,9 @@
                 if (this.position == 0) return '';
                 return new Date(this.dates[this.position-1] * 1000).toISOString();
             },
+            top() {
+                return this.ranking.slice(0, 50);
+            }
         },
         methods: {
             nameOf(who) {
@@ -103,17 +112,11 @@
                             const delta = lastDelta[(who<<8)+block];
                             if (delta === 0) continue;
                             nchanged++;
-
-                            const updatedCount = (this.totals.get(who) || 0) + delta;
-                            if (updatedCount === 0) {
-                                this.totals.delete(who);
-                            } else {
-                                this.totals.set(who, updatedCount);
-                            }
+                            this.totals[who] += delta;
                         }
                     }
                 }
-                console.log(nchanged);
+                this.ranking.sort((a,b) => this.totals[b] - this.totals[a])
             }
             requestAnimationFrame(slidePosition);
         }

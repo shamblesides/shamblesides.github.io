@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf8">
+    <meta viewport="width=device-width, initial-scale=1">
+    <title>ipv4.games Visualizer | Nigel Nelson's Blog</title>
+    <style>
+        html {
+            max-width: 70ch;
+            padding: 3em 1em;
+            margin: auto;
+            line-height: 1.75;
+            font-size: 1.25em;
+        }
+        [v-cloak] {
+            display: none
+        }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+
+<body>
+
+<div id="app" v-cloak>
+    <p>Date: {{currentDate}}</p>
+    <button type="button" v-on:click="position = Math.max(0, position-1)">-</button>
+    <input type="range" min="0" v-bind:max="numRecords" v-model="position">
+    <button type="button" v-on:click="position = Math.min(numRecords, position+1)">+</button>
+    <button type="button" v-on:click="position = 300000">300k</button>
+    <ul>
+        <li v-for="[who, count] in totals" :key="who">
+            {{nameOf(who)}} {{count}}
+        </li>
+    </ul>
+    <p>Total records: {{numRecords}}</p>
+</div>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                numRecords: 0,
+                position: 0,
+                totals: new Map(),
+                names: [],
+                dates: [],
+            }
+        },
+        computed: {
+            currentDate() {
+                if (this.position == 0) return '';
+                return new Date(this.dates[this.position-1] * 1000).toISOString();
+            },
+        },
+        methods: {
+            nameOf(who) {
+                return this.names[who-1];
+            }
+        },
+        async created() {
+            const wasm$ = WebAssembly.instantiateStreaming(fetch('claims.wasm'));
+
+            const names$ = fetch('names.txt')
+            .then(res => res.text())
+            .then(lines => lines.split('\n'));
+
+            const claims$ = fetch('claims.bin')
+            .then(res => res.arrayBuffer());
+
+            const numRecords = 1269234;
+            this.names = await names$;
+            const wasm = await wasm$;
+            const file = await claims$;
+            const dates = new Uint32Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.dates.value, numRecords);
+            const who = new Uint16Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.who.value, numRecords);
+            const stolenFrom = new Uint16Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.stolen_from.value, numRecords);
+            const block = new Uint8Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.block.value, numRecords);
+
+            const scores = new Uint32Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.scores.value, (this.names.length+1)*256);
+            const lastDelta = new Int32Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.last_delta.value, (this.names.length+1)*256);
+            const lastTouched = new Uint8Array(wasm.instance.exports.memory.buffer, wasm.instance.exports.last_touched.value, this.names.length+1);
+
+            dates.set(new Uint32Array(file.slice(0, numRecords*4)));
+            who.set(new Uint16Array(file.slice(numRecords*4, numRecords*6)));
+            stolenFrom.set(new Uint16Array(file.slice(numRecords*6, numRecords*8)));
+            block.set(new Uint8Array(file.slice(numRecords*8, numRecords*9)));
+
+            this.numRecords = numRecords;
+            this.dates = dates;
+
+            let lastPosition = this.position;
+            const slidePosition = () => {
+                requestAnimationFrame(slidePosition);
+                if (this.position === lastPosition) return;
+                lastPosition = this.position;
+
+                wasm.instance.exports.update_position(+this.position);
+
+                let nchanged = 0;
+                for (let who = 1; who <= this.names.length; ++who) {
+                    if (lastTouched[who]) {
+                        for (let block = 0; block <= 255; ++block) {
+                            const delta = lastDelta[(who<<8)+block];
+                            if (delta === 0) continue;
+                            nchanged++;
+
+                            const updatedCount = (this.totals.get(who) || 0) + delta;
+                            if (updatedCount === 0) {
+                                this.totals.delete(who);
+                            } else {
+                                this.totals.set(who, updatedCount);
+                            }
+                        }
+                    }
+                }
+                console.log(nchanged);
+            }
+            requestAnimationFrame(slidePosition);
+        }
+    });
+
+    app.mount(document.getElementById('app'))
+</script>
+</body>

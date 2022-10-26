@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf8">
+    <meta viewport="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <style>
+        html {
+            max-width: 70ch;
+            padding: 3em 1em;
+            margin: auto;
+            line-height: 1.75;
+            font-size: 1.25em;
+        }
+        [v-cloak] {
+            display: none
+        }
+        @keyframes ip-row-appear {
+            from {
+                background-color: lightgreen;
+            }
+            to {
+                background-color: inherit;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+<!-- <section id="familiars">
+    <h2>Familiars.io</h2>
+</section> -->
+<!-- <section id="rpnow">
+    <h2>RPNow</h2>
+</section> -->
+<section id="ipv4">
+    <h2><a href="https://ipv4.games" target="_blank">ipv4.games</a></h2>
+    <table style="font-family: monospace; border-collapse: collapse;">
+        <tbody>
+            <tr v-for="info in shown" :key="info[2]" style="animation: ip-row-appear 0.5s normal forwards ease-in-out;">
+                <!-- <td>{{new Date(info[2]*1000).toISOString().slice(11,19)}}</td> -->
+                <td style="width: 18ch">{{formatIP(info[0])}}</td>
+                <td style="width:20ch;max-width:20ch; overflow: hidden; text-overflow: ellipsis;">{{info[1]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+<!-- <section id="chatchat"></section>
+    <h2>ChatChat</h2>
+</section> -->
+
+<script>
+    // IPV4.GAMES
+    Vue.createApp({
+        data() {
+            return {
+                shown: [],
+                upcoming: [],
+                serverTime: 0,
+                windowTime: 0,
+            }
+        },
+        created() {
+            fetch('https://ipv4.games/recent')
+            .then(res => res.json())
+            .then(info => {
+                this.serverTime = Math.max(info.now[0] + info.now[1]/1e9, info.recent[0][2]);
+                this.windowTime = this.serverTime - 10;
+                this.shown = info.recent.filter(([,,t]) => t < this.windowTime).slice(0, 7);
+                this.upcoming = info.recent.filter(([,,t]) => t >= this.windowTime && t < (this.serverTime|0));
+                this.artificiallyStaggerDates(this.shown);
+                this.artificiallyStaggerDates(this.upcoming);
+                setInterval(() => this.fetchUpdate(), 3000);
+                setInterval(() => this.advanceWindow(0.1), 100);
+            });
+        },
+        methods: {
+            formatIP(n) {
+                return `${n>>>24}.${(n>>>16)&255}.${(n>>>8)&255}.${n&255}`
+            },
+            advanceWindow(s) {
+                const windowDelta = this.serverTime - this.windowTime;
+                if (windowDelta - s < 1) return;
+                else if (windowDelta - s < 5) this.windowTime += s / 2
+                else if (windowDelta - s < 15) this.windowTime += s;
+                else this.windowTime = this.serverTime - 15;
+                while (this.upcoming.length > 0 && this.upcoming[this.upcoming.length-1][2] < this.windowTime) {
+                    this.shown.unshift(this.upcoming.pop());
+                    this.shown = this.shown.slice(0, 7);
+                }
+            },
+            fetchUpdate() {
+                fetch('https://ipv4.games/recent')
+                .then(res => res.json())
+                .then(info => {
+                    this.serverTime = Math.max(info.now[0] + info.now[1]/1e9, info.recent[0][2]);
+                    // console.log(new Date(this.serverTime*1000).toISOString().slice(11,19), '/', new Date(info.recent[0][2]*1000).toISOString().slice(11,19), this.formatIP(info.recent[0][0]), info.recent[0][1]);
+                    const newRecords = info.recent.filter(([,,t]) => t > (this.upcoming[0] || this.shown[0])[2] && t < (this.serverTime|0));
+                    this.artificiallyStaggerDates(newRecords);
+                    this.upcoming.unshift(...newRecords);
+                });
+            },
+            artificiallyStaggerDates(records) {
+                // Assuming their dates are ordered newest-to-oldest.
+                // Artificially stagger timestamps to make it cooler when they roll in
+                while (records.length > 0) {
+                    const top = records.filter(r => r[2] === records[0][2]);
+                    top.forEach((r, i, arr) => r[2] -= i/arr.length);
+                    records = records.slice(top.length);
+                }
+            }
+        },
+    }).mount(document.getElementById('ipv4'))
+</script>
+
+</body>

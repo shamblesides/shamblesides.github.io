@@ -14,7 +14,7 @@
         [v-cloak] {
             display: none
         }
-        @keyframes ip-row-appear {
+        @keyframes green-appear {
             from {
                 background-color: lightgreen;
             }
@@ -37,7 +37,7 @@
     <h2><a href="https://ipv4.games" target="_blank">ipv4.games</a></h2>
     <table style="font-family: monospace; border-collapse: collapse;">
         <tbody>
-            <tr v-for="info in shown" :key="info[2]" style="animation: ip-row-appear 0.5s normal forwards ease-in-out;">
+            <tr v-for="info in shown" :key="info[2]" style="animation: green-appear 0.5s normal forwards ease-in-out;">
                 <!-- <td>{{new Date(info[2]*1000).toISOString().slice(11,19)}}</td> -->
                 <td style="width: 18ch">{{formatIP(info[0])}}</td>
                 <td style="width:20ch;max-width:20ch; overflow: hidden; text-overflow: ellipsis;">{{info[1]}}</td>
@@ -45,9 +45,20 @@
         </tbody>
     </table>
 </section>
-<!-- <section id="chatchat"></section>
-    <h2>ChatChat</h2>
-</section> -->
+<section id="chatchat">
+    <h2><a href="https://chatchatgame.netlify.app" target="_blank">ChatChat</a></h2>
+    <table style="font-family: monospace; border-collapse: collapse;">
+        <tbody style="vertical-align:top;">
+            <tr v-for="room in rooms" :key="room.id" style="animation: green-appear 0.5s normal forwards ease-in-out;">
+                <td style="width:18ch;max-width:18ch; overflow: hidden; text-overflow: ellipsis;">{{room.name}}</td>
+                <td style="width:10ch;max-width:10ch; word-wrap: break-word;">
+                    <span v-for="_ in room.cats">🐈</span>
+                    <span v-if="room.cats === 0">(empty)</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
 
 <script>
     // IPV4.GAMES
@@ -111,6 +122,26 @@
             }
         },
     }).mount(document.getElementById('ipv4'))
+
+    // CHATCHAT
+    Vue.createApp({
+        data() {
+            return {
+                rooms: [],
+            }
+        },
+        created() {
+            this.fetchUpdate();
+            setInterval(() => this.fetchUpdate(), 20000);
+        },
+        methods: {
+            fetchUpdate() {
+                fetch('https://chatchat.nfshost.com')
+                .then(res => res.json())
+                .then(rooms => this.rooms = rooms);
+            },
+        },
+    }).mount(document.getElementById('chatchat'))
 </script>
 
 </body>

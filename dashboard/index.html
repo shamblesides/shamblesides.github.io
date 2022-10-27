@@ -14,12 +14,32 @@
         [v-cloak] {
             display: none
         }
+        .pixellated {
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
         @keyframes green-appear {
             from {
                 background-color: lightgreen;
             }
             to {
                 background-color: inherit;
+            }
+        }
+        @keyframes blinky {
+            from {
+                opacity: 0;
+            }
+            40% {
+                opacity: 0;
+            }
+            60% {
+                opacity: 1;
+            }
+            to {
+                opacity: 1;
             }
         }
         .chess {
@@ -31,9 +51,15 @@
 </head>
 <body>
 
-<!-- <section id="familiars">
-    <h2>Familiars.io</h2>
-</section> -->
+<section id="familiars">
+    <h2><a href="https://www.familiars.io" target="_blank">Familiars.io</a></h2>
+    <div v-for="layer in 2" class="pixellated" style="display:inline-block; position:relative; width:184px; height:184px; background-size:cover; margin-right: 16px;" :style="{backgroundImage:'url('+images[layer-1]+')'}">
+        <template v-for="player in players[layer-1]">
+            <div style="width:6px;height:6px;position:absolute; animation: 0.5s linear infinite alternate blinky;" :style="{'left':(player.x*2-1)+'px', 'top':(player.y*2-1)+'px', 'backgroundColor':player.pvp?'red':'white'}">
+        </template>
+    </div>
+</section>
+
 <section id="rpnow">
     <h2><a href="https://www.rpnow.net" target="_blank">RPNow</a></h2>
     How new the user is:<br>
@@ -52,6 +78,7 @@
         </span>
     </div>
 </section>
+
 <section id="ipv4">
     <h2><a href="https://ipv4.games" target="_blank">ipv4.games</a></h2>
     <table style="font-family: monospace; border-collapse: collapse;">
@@ -64,6 +91,7 @@
         </tbody>
     </table>
 </section>
+
 <section id="chatchat">
     <h2><a href="https://chatchatgame.netlify.app" target="_blank">ChatChat</a></h2>
     <table style="font-family: monospace; border-collapse: collapse;">
@@ -80,6 +108,33 @@
 </section>
 
 <script>
+    // FAMILIARS.IO
+    Vue.createApp({
+        data() {
+            return {
+                images: [
+                    'familiars-map0.png',
+                    'familiars-map1.png',
+                ],
+                players: [],
+            }
+        },
+        created() {
+            this.fetchUpdate();
+            setInterval(() => this.fetchUpdate(), 2000);
+        },
+        methods: {
+            fetchUpdate() {
+                fetch('https://www.familiars.io/api/radar')
+                .then(res => res.json())
+                .then(players => this.players = [
+                    players.filter(p => p[0].y < 0x4000).map(([{x,y},pvp]) => ({x,y,pvp})),
+                    players.filter(p => p[0].y >= 0x4000).map(([{x,y},pvp]) => ({x,y:y-0x4000,pvp})),
+                ]);
+            },
+        },
+    }).mount(document.getElementById('familiars'))
+
     // RPNOW.NET
     Vue.createApp({
         data() {

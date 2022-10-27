@@ -22,6 +22,10 @@
                 background-color: inherit;
             }
         }
+        .chess {
+            font-size: 150%;
+            line-height: 1;
+        }
     </style>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -30,9 +34,24 @@
 <!-- <section id="familiars">
     <h2>Familiars.io</h2>
 </section> -->
-<!-- <section id="rpnow">
-    <h2>RPNow</h2>
-</section> -->
+<section id="rpnow">
+    <h2><a href="https://www.rpnow.net">RPNow</a></h2>
+    How new the user is:<br>
+    <span class="chess">♟︎</span><span style="margin-right: 20px;">new</span>
+    <span class="chess">♞</span><span style="margin-right: 20px;">days</span>
+    <span class="chess">♝</span><span style="margin-right: 20px;">weeks</span>
+    <span class="chess">♜</span><span style="margin-right: 20px;">months</span>
+    <span class="chess">♛</span><span style="margin-right: 20px;">3+ months</span>
+    <span class="chess">♚</span><span style="margin-right: 20px;">years</span>
+    <div style="margin-top: 10px">
+        <span v-for="room in rooms" :key="room.tempId" style="border:solid 2px; display:inline-block; margin-right:10px; margin-bottom:10px;">
+            <span v-for="user in room.users" :key="user.tempId" style="padding: 0 10px" :style="{color:iconColor(user)}">
+                <span class="chess">{{icon(user)}}</span>{{user.messages}}
+                <!-- {{Math.random().toFixed(2).slice(2)}} -->
+            </span>
+        </span>
+    </div>
+</section>
 <section id="ipv4">
     <h2><a href="https://ipv4.games" target="_blank">ipv4.games</a></h2>
     <table style="font-family: monospace; border-collapse: collapse;">
@@ -61,6 +80,50 @@
 </section>
 
 <script>
+    // RPNOW.NET
+    Vue.createApp({
+        data() {
+            return {
+                rooms: [],
+                now: Date.now(),
+            }
+        },
+        created() {
+            this.fetchUpdate();
+            setInterval(() => this.fetchUpdate(), 3000);
+            setInterval(() => this.now = Date.now(), 1000);
+        },
+        methods: {
+            fetchUpdate() {
+                fetch('https://rpnow.nfshost.com')
+                .then(res => res.json())
+                .then(rooms => {
+                    // rooms.sort((a,b) => Math.max(...b.users.map(u=>u.lastMessage)) - Math.max(...a.users.map(u=>u.lastMessage)))
+                    this.rooms = rooms
+                });
+            },
+            icon(user) {
+                // if (this.now - user.lastMessage < 15000) return '💬'
+                if (user.age === 0) return '♟︎'
+                if (user.age === 1) return '♞'
+                if (user.age === 7) return '♝'
+                if (user.age === 30) return '♜'
+                if (user.age === 90) return '♛'
+                if (user.age === 365) return '♚'
+                return '❓'
+            },
+            iconColor(user) {
+                // return ['#CC0000', '#00AA00', '#0000DD', '#CC00CC'][user.flavor];
+
+                // const h = parseInt(user.tempId.slice(0,1), 16) / 16 * 360;
+                // return `hsl(${h}, 100%, 30%)`;
+
+                if (this.now - user.lastMessage < 15000) return 'blue'
+                return 'black'
+            },
+        },
+    }).mount(document.getElementById('rpnow'))
+
     // IPV4.GAMES
     Vue.createApp({
         data() {

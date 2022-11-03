@@ -229,8 +229,16 @@
 
         function* pollingSaga() {
             while (true) {
-                const data = yield fetch('https://ipv4.games/recent').then(res => res.json());
-                yield ReduxSaga.effects.put({ type: 'freshData', data });
+                const data = yield fetch('https://ipv4.games/recent')
+                    .then(res => {
+                        if (res.status === 200) return res;
+                        else throw new Error(`Error ${res.status}`)
+                    })
+                    .then(res => res.json())
+                    .catch(e => null)
+                if (data != null) {
+                    yield ReduxSaga.effects.put({ type: 'freshData', data });
+                }
                 yield ReduxSaga.effects.delay(3000);
             }
             yield takeLatest('requestPoll', doFetch)

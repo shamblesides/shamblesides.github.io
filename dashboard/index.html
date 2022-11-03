@@ -52,6 +52,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/redux@4.2.0/dist/redux.js" crossorigin></script>
     <script src="https://unpkg.com/react-redux@8.0.4/dist/react-redux.js" crossorigin></script>
+    <script src="https://unpkg.com/redux-saga@1.2.1/dist/redux-saga.umd.js" crossorigin></script>
     </head>
 <body>
 
@@ -170,6 +171,12 @@
                 records = records.slice(top.length);
             }
         }
+        const INITIAL_STATE = {
+            shown: [],
+            upcoming: [],
+            serverTime: null,
+            windowTime: 0,
+        }
         function reducer(state, action) {
             if (action.type === 'freshData') {
                 const { data: info } = action;
@@ -216,34 +223,35 @@
             }
         }
 
-        return Redux.createStore(reducer, {
-            shown: [],
-            upcoming: [],
-            serverTime: null,
-            windowTime: 0,
-        });
+        const sagaMiddleware = ReduxSaga.default();
+
+        const store = Redux.createStore(reducer, INITIAL_STATE, Redux.applyMiddleware(sagaMiddleware));
+
+        function* pollingSaga() {
+            while (true) {
+                const data = yield fetch('https://ipv4.games/recent').then(res => res.json());
+                yield ReduxSaga.effects.put({ type: 'freshData', data });
+                yield ReduxSaga.effects.delay(3000);
+            }
+            yield takeLatest('requestPoll', doFetch)
+        }
+
+        function* advanceWindowSaga() {
+            while (true) {
+                yield ReduxSaga.effects.delay(100);
+                yield ReduxSaga.effects.put({ type: 'advanceWindow', seconds: 0.1 });
+            }
+        }
+
+        sagaMiddleware.run(pollingSaga);
+        sagaMiddleware.run(advanceWindowSaga);
+
+        return store;
     }
     const ipv4Store = makeIpv4Store();
 
     function Ipv4() {
         const shown = ReactRedux.useSelector(state => state.shown);
-        const dispatch = ReactRedux.useDispatch();
-
-        React.useEffect(() => {
-            const fetchUpdate = () => fetch('https://ipv4.games/recent')
-                .then(res => res.json())
-                .then(data => dispatch({ type: 'freshData', data }));
-
-            fetchUpdate();
-            const timer = setInterval(fetchUpdate, 3000);
-            return () => clearInterval(timer);
-        }, []);
-
-        React.useEffect(() => {
-            const timer = setInterval(() => dispatch({ type: 'advanceWindow', seconds: 0.1 }), 100)
-            return () => clearInterval(timer);
-        }, []);
-
         return $(Ipv4Component, {shown});
     }
     function Ipv4Component({shown}) {

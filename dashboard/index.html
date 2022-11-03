@@ -257,7 +257,7 @@
                 $tbody({},
                     shown.map(([ip, name, timestamp]) => $tr({key:timestamp, style:{animation:'green-appear 0.5s normal forwards ease-in-out'}},
                         $td({style:{width:'18ch'}}, formatIP(ip)),
-                        $td({style:{width:'20ch', maxWidth:'20ch', overflow:'hidden', textOverflow:'ellipsis'}}, `${name}`),
+                        $td({style:{width:'20ch', maxWidth:'20ch', overflow:'hidden', whiteSpace: 'nowrap', textOverflow:'ellipsis'}}, `${name}`),
                     ))
                 )
             ),

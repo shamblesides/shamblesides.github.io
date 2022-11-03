@@ -50,7 +50,9 @@
 
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-</head>
+    <script src="https://unpkg.com/redux@4.2.0/dist/redux.js" crossorigin></script>
+    <script src="https://unpkg.com/react-redux@8.0.4/dist/react-redux.js" crossorigin></script>
+    </head>
 <body>
 
 <main></main>
@@ -158,7 +160,7 @@
         );
     }
 
-    function useIpv4Reducer() {
+    function makeIpv4Store() {
         function artificiallyStaggerDates(records) {
             // Assuming their dates are ordered newest-to-oldest.
             // Artificially stagger timestamps to make it cooler when they roll in
@@ -210,18 +212,22 @@
                     return { ...state, windowTime };
                 }
             } else {
-                throw new Error('unknown action type: ' +action.type);
+                return state;
             }
         }
-        return React.useReducer(reducer, {
+
+        return Redux.createStore(reducer, {
             shown: [],
             upcoming: [],
             serverTime: null,
             windowTime: 0,
         });
     }
+    const ipv4Store = makeIpv4Store();
+
     function Ipv4() {
-        const [{ shown }, dispatch] = useIpv4Reducer();
+        const shown = ReactRedux.useSelector(state => state.shown);
+        const dispatch = ReactRedux.useDispatch();
 
         React.useEffect(() => {
             const fetchUpdate = () => fetch('https://ipv4.games/recent')
@@ -284,7 +290,9 @@
         return $(React.Fragment, {},
             $(Familiars),
             $(Rpnow),
-            $(Ipv4),
+            $(ReactRedux.Provider, {store: ipv4Store},
+                $(Ipv4),
+            ),
             $(ChatChat),
         )
     }

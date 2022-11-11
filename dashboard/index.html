@@ -86,7 +86,7 @@
             <tr v-for="info in shown" :key="info[2]" style="animation: green-appear 0.5s normal forwards ease-in-out;">
                 <!-- <td>{{new Date(info[2]*1000).toISOString().slice(11,19)}}</td> -->
                 <td style="width: 18ch">{{formatIP(info[0])}}</td>
-                <td style="width:20ch;max-width:20ch; overflow: hidden; text-overflow: ellipsis;">{{info[1]}}</td>
+                <td style="width:20ch;max-width:20ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{info[1]}}</td>
             </tr>
         </tbody>
     </table>

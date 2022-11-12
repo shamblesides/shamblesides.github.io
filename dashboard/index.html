@@ -108,128 +108,70 @@
 </section>
 
 <script>
+	const nowish = Vue.ref(Date.now());
+    setInterval(() => nowish.value = Date.now(), 1000);
+    
+	function poll (init, uri, interval, transform=(x)=>x) {
+		const data = Vue.ref(init)
+		const fetchUpdate = () => fetch(uri)
+			.then(res => res.json())
+			.then(x => data.value = transform(x));
+		fetchUpdate();
+		setInterval(fetchUpdate, interval);
+
+		return data;
+	}
+	
     // FAMILIARS.IO
     Vue.createApp({
-        data() {
-            return {
-                images: [
-                    'familiars-map0.png',
-                    'familiars-map1.png',
-                ],
-                players: [],
-            }
-        },
-        created() {
-            this.fetchUpdate();
-            setInterval(() => this.fetchUpdate(), 2000);
-        },
-        methods: {
-            fetchUpdate() {
-                fetch('https://www.familiars.io/api/radar')
-                .then(res => res.json())
-                .then(players => this.players = [
-                    players.filter(p => p[0].y < 0x4000).map(([{x,y},pvp]) => ({x,y,pvp})),
-                    players.filter(p => p[0].y >= 0x4000).map(([{x,y},pvp]) => ({x,y:y-0x4000,pvp})),
-                ]);
-            },
-        },
+		setup() {
+			const images = [
+				'familiars-map0.png',
+				'familiars-map1.png',
+			];
+			const transform = players => [
+				players.filter(p => p[0].y < 0x4000).map(([{x,y},pvp]) => ({x,y,pvp})),
+				players.filter(p => p[0].y >= 0x4000).map(([{x,y},pvp]) => ({x,y:y-0x4000,pvp})),
+			];
+			const players = poll([], 'https://www.familiars.io/api/radar', 2000, transform);
+			return { players, images };
+		}
     }).mount(document.getElementById('familiars'))
 
     // RPNOW.NET
     Vue.createApp({
-        data() {
-            return {
-                rooms: [],
-                now: Date.now(),
-            }
-        },
-        created() {
-            this.fetchUpdate();
-            setInterval(() => this.fetchUpdate(), 3000);
-            setInterval(() => this.now = Date.now(), 1000);
-        },
-        methods: {
-            fetchUpdate() {
-                fetch('https://rpnow.nfshost.com')
-                .then(res => res.json())
-                .then(rooms => {
-                    // rooms.sort((a,b) => Math.max(...b.users.map(u=>u.lastMessage)) - Math.max(...a.users.map(u=>u.lastMessage)))
-                    this.rooms = rooms
-                });
-            },
-            icon(user) {
-                // if (this.now - user.lastMessage < 15000) return '💬'
-                if (user.age === 0) return '♟︎'
-                if (user.age === 1) return '♞'
-                if (user.age === 7) return '♝'
-                if (user.age === 30) return '♜'
-                if (user.age === 90) return '♛'
-                if (user.age === 365) return '♚'
-                return '❓'
-            },
-            iconColor(user) {
-                // return ['#CC0000', '#00AA00', '#0000DD', '#CC00CC'][user.flavor];
-
-                // const h = parseInt(user.tempId.slice(0,1), 16) / 16 * 360;
-                // return `hsl(${h}, 100%, 30%)`;
-
-                if (this.now - user.lastMessage < 15000) return 'blue'
-                return 'black'
-            },
-        },
-    }).mount(document.getElementById('rpnow'))
+		setup() {
+			// rooms.sort((a,b) => Math.max(...b.users.map(u=>u.lastMessage)) - Math.max(...a.users.map(u=>u.lastMessage)))
+			const rooms = poll([], 'https://rpnow.nfshost.com', 3000);
+			const icons = {
+				0: '♟︎',
+				1: '♞',
+				7: '♝',
+				30: '♜',
+				90: '♛',
+				365: '♚',
+			};
+			// if (nowish.value - user.lastMessage < 15000) return '💬'
+			const icon = (user) => icons[user.age] || '❓';
+			// const h = parseInt(user.tempId.slice(0,1), 16) / 16 * 360;
+			// return `hsl(${h}, 100%, 30%)`;
+			const iconColor = (user) => (nowish.value - user.lastMessage < 15000) ? 'blue': 'black';
+			return { rooms, icon, iconColor };
+		}
+	}).mount(document.getElementById('rpnow'))
 
     // IPV4.GAMES
     Vue.createApp({
-        data() {
-            return {
-                shown: [],
-                upcoming: [],
-                serverTime: 0,
-                windowTime: 0,
-            }
-        },
-        created() {
-            fetch('https://ipv4.games/recent')
-            .then(res => res.json())
-            .then(info => {
-                this.serverTime = Math.max(info.now[0] + info.now[1]/1e9, info.recent[0][2]);
-                this.windowTime = this.serverTime - 10;
-                this.shown = info.recent.filter(([,,t]) => t < this.windowTime).slice(0, 7);
-                this.upcoming = info.recent.filter(([,,t]) => t >= this.windowTime && t < (this.serverTime|0));
-                this.artificiallyStaggerDates(this.shown);
-                this.artificiallyStaggerDates(this.upcoming);
-                setInterval(() => this.fetchUpdate(), 3000);
-                setInterval(() => this.advanceWindow(0.1), 100);
-            });
-        },
-        methods: {
-            formatIP(n) {
-                return `${n>>>24}.${(n>>>16)&255}.${(n>>>8)&255}.${n&255}`
-            },
-            advanceWindow(s) {
-                const windowDelta = this.serverTime - this.windowTime;
-                if (windowDelta - s < 1) return;
-                else if (windowDelta - s < 5) this.windowTime += s / 2
-                else if (windowDelta - s < 15) this.windowTime += s;
-                else this.windowTime = this.serverTime - 15;
-                while (this.upcoming.length > 0 && this.upcoming[this.upcoming.length-1][2] < this.windowTime) {
-                    this.shown.unshift(this.upcoming.pop());
-                    this.shown = this.shown.slice(0, 7);
-                }
-            },
-            fetchUpdate() {
-                fetch('https://ipv4.games/recent')
-                .then(res => res.json())
-                .then(info => {
-                    this.serverTime = Math.max(info.now[0] + info.now[1]/1e9, info.recent[0][2]);
-                    // console.log(new Date(this.serverTime*1000).toISOString().slice(11,19), '/', new Date(info.recent[0][2]*1000).toISOString().slice(11,19), this.formatIP(info.recent[0][0]), info.recent[0][1]);
-                    const newRecords = info.recent.filter(([,,t]) => t > (this.upcoming[0] || this.shown[0])[2] && t < (this.serverTime|0));
-                    this.artificiallyStaggerDates(newRecords);
-                    this.upcoming.unshift(...newRecords);
-                });
-            },
-            artificiallyStaggerDates(records) {
+		setup() {
+			const numShown = 7;
+			const shown = Vue.reactive([]);
+			let upcoming = null;
+			let serverTime = 0;
+			let windowTime = 0;
+			
+			const formatIP = (n) => `${n>>>24}.${(n>>>16)&255}.${(n>>>8)&255}.${n&255}`;
+			
+			function artificiallyStaggerDates(records) {
                 // Assuming their dates are ordered newest-to-oldest.
                 // Artificially stagger timestamps to make it cooler when they roll in
                 while (records.length > 0) {
@@ -238,28 +180,52 @@
                     records = records.slice(top.length);
                 }
             }
-        },
+
+			fetch('https://ipv4.games/recent')
+            .then(res => res.json())
+            .then(info => {
+                let serverTime = Math.max(info.now[0] + info.now[1]/1e9, info.recent[0][2]);
+                let windowTime = serverTime - 10;
+                shown.push(...info.recent.filter(([,,t]) => t < windowTime).slice(0, numShown));
+                upcoming = info.recent.filter(([,,t]) => t >= windowTime && t < (serverTime|0));
+                artificiallyStaggerDates(shown);
+                artificiallyStaggerDates(upcoming);
+                setInterval(function fetchUpdate () {
+					fetch('https://ipv4.games/recent')
+					.then(res => res.json())
+					.then(info => {
+						serverTime = Math.max(info.now[0] + info.now[1]/1e9, info.recent[0][2]);
+						// console.log(new Date(serverTime*1000).toISOString().slice(11,19), '/', new Date(info.recent[0][2]*1000).toISOString().slice(11,19), formatIP(info.recent[0][0]), info.recent[0][1]);
+						const newRecords = info.recent.filter(([,,t]) => t > (upcoming[0] || shown[0])[2] && t < (serverTime|0));
+						artificiallyStaggerDates(newRecords);
+						upcoming.unshift(...newRecords);
+					});
+				}, 3000);
+                setInterval(function advanceWindow () {
+					const dt = 0.1;
+					const windowDelta = serverTime - windowTime;
+					if (windowDelta - dt < 1) return;
+					else if (windowDelta - dt < 5) windowTime += dt / 2
+					else if (windowDelta - dt < 15) windowTime += dt;
+					else windowTime = serverTime - 15;
+					while (upcoming.length > 0 && upcoming[upcoming.length-1][2] < windowTime) {
+						shown.unshift(upcoming.pop());
+						shown.length = numShown;
+					}
+				}, 100);
+            });
+            
+			return { shown, formatIP };
+		}
     }).mount(document.getElementById('ipv4'))
 
     // CHATCHAT
     Vue.createApp({
-        data() {
-            return {
-                rooms: [],
-            }
-        },
-        created() {
-            this.fetchUpdate();
-            setInterval(() => this.fetchUpdate(), 20000);
-        },
-        methods: {
-            fetchUpdate() {
-                fetch('https://chatchat.nfshost.com')
-                .then(res => res.json())
-                .then(rooms => this.rooms = rooms);
-            },
-        },
-    }).mount(document.getElementById('chatchat'))
+		setup() {
+			const rooms = poll([], 'https://chatchat.nfshost.com', 20000);
+			return { rooms };
+		}
+	}).mount(document.getElementById('chatchat'))
 </script>
 
 </body>
